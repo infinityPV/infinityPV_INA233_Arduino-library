@@ -3,11 +3,11 @@ infinityPV INA219 Arduino Library
 
 ![LiBAT5V2A](https://github.com/infinityPV/infinityPV_INA219-library/blob/master/Arduino2.jpg)
 
-[*LiBAT5V2A Multiplatform  (14347)*](https://www.infinitypv.com) 
+[*LiBAT5V2A Multiplatform *](https://www.infinitypv.com) 
 
 
-This is an Arduino IDE library for monitoring voltage/current at different points in the infinityPV LiBAT5V2A board
-through the INA219 ADCs on board.  
+This is an Arduino IDE library for monitoring voltage/current at different points in the infinityPV LiBAT5V2A evaluation board
+through the INA219 ADCs on board. However, you can use the library for your own designs including INA219 ADCs :).  
 
 Repository Contents
 -------------------
@@ -30,7 +30,7 @@ Product Versions
 
 Version History
 ---------------
-* [V1.0.0](https://github.com/sparkfun/Sparkfun_AS726X_Arduino_Library/releases/tag/V1.0.0) - Initial Release
+* [V1.0.0](https://github.com/infinityPV/infinityPV_INA219-library/releases/tag/V1.0.0) - Initial Release
 
 
 License Information
@@ -40,10 +40,7 @@ This product is _**open source**_!
 
 Please review the LICENSE.md file for license information. 
 
-If you have any questions or concerns on licensing, please contact techsupport@sparkfun.com.
+If you have any questions or concerns on licensing, please contact info@infinitypv.com.
 
 Distributed as-is; no warranty is given.
 
-- Your friends at SparkFun.
-
-_<COLLABORATION CREDIT>_
