@@ -1,7 +1,7 @@
 infinityPV INA219 Arduino Library
 ========================================
 
-![AS726X](https://github.com/sparkfun/Sparkfun_AS726X_Arduino_Library/blob/master/extras/14351-01.jpg)
+![LiBAT5V2A](https://github.com/infinityPV/infinityPV_INA219-library/Arduino2.jpg)
 
 [*LiBAT5V2A Multiplatform  (14347)*](https://www.sparkfun.com/products/14347)
 
