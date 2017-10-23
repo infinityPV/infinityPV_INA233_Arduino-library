@@ -25,11 +25,11 @@ Documentation
 
 Product Versions
 ----------------
-* [V0](https://infinitypv.com/products/electronics)- LiBAT5V2A Boost Multiplatform, V0. Boost converter from Li batteries to 5V/2A including INA219 and MCP3426 ADCs as monitoring devices. 
+* [LiBAT5V2A Multiplatform V0](https://infinitypv.com/products/electronics)- Boost converter from Li batteries to 5V/2A including INA219 and MCP3426 ADCs as monitoring devices. 
 
 Version History
 ---------------
-* [V1.0.0](https://github.com/infinityPV/infinityPV_INA219-library/releases/tag/V1.0.0) - Initial Release
+* [V0.0](https://github.com/infinityPV/infinityPV_INA219-library/releases/tag/v0.0) - Test Release
 
 
 License Information
