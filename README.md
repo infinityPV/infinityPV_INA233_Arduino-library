@@ -1,7 +1,7 @@
 infinityPV INA219 Arduino Library
 ========================================
 
-![LiBAT5V2A](https://github.com/infinityPV/infinityPV_INA219-library/blob/master/extras/LiBAT5V2A%20picture1.jpg)
+![LiBAT5V2A](https://github.com/infinityPV/infinityPV_INA219_Arduino-library/blob/master/extras/LiBAT5V2A%20picture1.jpg)
 
 [*LiBAT5V2A Multiplatform *](https://www.infinitypv.com) 
 
