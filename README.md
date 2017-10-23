@@ -19,12 +19,12 @@ Repository Contents
 
 Documentation
 --------------
-* **[LiBAT5V2A Application Note](https://infinitypv.com/electronics)** - Application Note for the LiBAT52A evaluation board. Here you can find where are place the INA219 ADCs and how to configure the shunt resistors to get highest accuracy mesuring current for your application. 
+* **[LiBAT5V2A Application Note](https://infinitypv.com/products/electronics)** - Application Note for the LiBAT52A evaluation board. Here you can find where are place the INA219 ADCs and how to configure the shunt resistors to get highest accuracy mesuring current for your application. 
 * **[INA219 datasheet](http://www.ti.com/lit/ds/symlink/ina219.pdf)** - INA219 ADC/I2C datasheet from Texas Instruments.
 
 Product Versions
 ----------------
-* [V0](https://infinitypv.com/electronics)- LiBAT5V2A Boost Multiplatform, V0. Boost converter from Li batteries to 5V/2A including INA219 and MCP3426 ADCs as monitoring devices. 
+* [V0](https://infinitypv.com/products/electronics)- LiBAT5V2A Boost Multiplatform, V0. Boost converter from Li batteries to 5V/2A including INA219 and MCP3426 ADCs as monitoring devices. 
 
 Version History
 ---------------
