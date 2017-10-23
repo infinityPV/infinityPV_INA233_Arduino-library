@@ -19,6 +19,7 @@ Repository Contents
 
 Documentation
 --------------
+* **[LiBAT5V2A Brochure](https://infinitypv.com/images/infinityPV_OPV3W60V_applicationnote_Rev100.pdf)** - Short description for the LiBAT5V2A evaluation board. 
 * **[LiBAT5V2A Application Note](https://infinitypv.com/images/infinityPV_OPV3W60V_applicationnote_Rev100.pdf)** - Application Note for the LiBAT52A evaluation board. Here you can find where are place the INA219 ADCs and how to configure the shunt resistors to get highest accuracy mesuring current for your application. 
 * **[INA219 datasheet](http://www.ti.com/lit/ds/symlink/ina219.pdf)** - INA219 ADC/I2C datasheet from Texas Instruments.
 
