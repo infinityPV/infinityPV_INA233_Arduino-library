@@ -14,19 +14,17 @@ Repository Contents
 
 * **/examples** - Example sketches for the library (.ino). Run these from the Arduino IDE. 
 * **/extras** - Additional documentation for the user. These files are ignored by the IDE. 
-* **/src** - Source files for the library (.cpp, .h).
-* **keywords.txt** - Keywords from this library that will be highlighted in the Arduino IDE. 
+* **/src** - Source files for the library (.cpp, .h). 
 * **library.properties** - General library properties for the Arduino package manager. 
 
 Documentation
 --------------
-* **[Library](https://github.com/sparkfun/Qwiic_Spectral_Sensor_AS726X)** - C library for the AS726X.
-* **[Hookup Guide](https://learn.sparkfun.com/tutorials/as726x-nirvi)** - Basic hookup guide for the AS726X.
+* **[LiBAT5V2A Application Note](https://infinitypv.com/electronics)** - Application Note for the LiBAT52A evaluation board. Here you can find where are place the INA219 ADCs and how to configure the shunt resistors to get highest accuracy mesuring current for your application. 
+* **[INA219 datasheet](http://www.ti.com/lit/ds/symlink/ina219.pdf)** - INA219 ADC/I2C datasheet from Texas Instruments.
 
 Product Versions
 ----------------
-* [14347](https://www.sparkfun.com/products/14347)- AS7262 Visible Spectral Sensor
-* [14351](https://www.sparkfun.com/products/14351)- AS7263 Near Infrared Spectral Sensor
+* [V0](https://infinitypv.com/electronics)- LiBAT5V2A Boost Multiplatform, V0. Boost converter from Li batteries to 5V/2A including INA219 and MCP3426 ADCs as monitoring devices. 
 
 Version History
 ---------------
