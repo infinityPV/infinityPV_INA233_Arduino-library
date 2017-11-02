@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-  @file     InfinityPV_INA219.cpp
+  @file     infinityPV_INA219.cpp
   @author   rava (infinityPV ApS)
 	@license  BSD (see license.txt)
 
@@ -31,7 +31,7 @@
 
 #include <Wire.h>
 
-#include "InfinityPV_INA219.h"
+#include "infinityPV_INA219.h"
 
 /**************************************************************************/
 /*!
