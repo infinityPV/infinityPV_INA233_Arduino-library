@@ -24,7 +24,7 @@
 // getShuntVoltage_mV(), getBusVoltage_V() and getCurrent_mA() to get
 // the measured values. 
 //
-// (*) The example uses the InfinityPV_INA219 library, which is 
+// (*) The example uses the infinityPV_INA219 library, which is 
 // a modification of the Adafruit_INA219 library, which licensed 
 // under BSD license. 
 //
@@ -32,7 +32,7 @@
 
 
 #include <Wire.h>
-#include <InfinityPV_INA219.h>
+#include <infinityPV_INA219.h>
 
 //I2C Adresses for the 3 INA219 on board 
 INA219 IC2(0x41);  // IC2 address 0x41 1000001 
