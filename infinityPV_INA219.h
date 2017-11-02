@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     InfinityPV_INA219.h
+    @file     infinityPV_INA219.h
     @author   rava (infinityPV ApS)
 	@license  BSD (see license.txt)
 
