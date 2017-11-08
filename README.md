@@ -19,17 +19,17 @@ Repository Contents
 
 Documentation
 --------------
-* **[LiBAT5V2A Brochure](https://infinitypv.com/images/infinityPV_OPV3W60V_applicationnote_Rev100.pdf)** - Short description for the LiBAT5V2A evaluation board. 
-* **[LiBAT5V2A Application Note](https://infinitypv.com/images/infinityPV_OPV3W60V_applicationnote_Rev100.pdf)** - Application Note for the LiBAT52A evaluation board. Here you can find where are place the INA219 ADCs and how to configure the shunt resistors to get highest accuracy mesuring current for your application. 
+* **[LiBAT5V2A Brochure](https://infinitypv.com/brochures/LiBAT5V2A_brochureV1.pdf)** - Short description for the LiBAT5V2A evaluation board. 
+* **[LiBAT5V2A Application Note](https://infinitypv.com/application_notes/LiBAT5V2A_applicationnoteV1.0.pdf)** - Application Note for the LiBAT52A evaluation board. Here you can find where are place the INA219 ADCs and how to configure the shunt resistors to get highest accuracy mesuring current for your application. 
 * **[INA219 datasheet](http://www.ti.com/lit/ds/symlink/ina219.pdf)** - INA219 ADC/I2C datasheet from Texas Instruments.
 
 Product Versions
 ----------------
-* [LiBAT5V2A Multiplatform V0](https://infinitypv.com/products/electronics)- Boost converter from Li batteries to 5V/2A including INA219 and MCP3426 ADCs as monitoring devices. 
+* [LiBAT5V2A Multiplatform V0](https://infinitypv.com/products/electronics/libat5v2a)- Boost converter from Li batteries to 5V/2A including INA219 and MCP3426 ADCs as monitoring devices. 
 
 Version History
 ---------------
-* [V0.0](https://github.com/infinityPV/infinityPV_INA219-library/releases/tag/v0.0) - Test Release
+* [V1.0](https://github.com/infinityPV/infinityPV_INA219-library/releases/tag/v1.0) - Test Release
 
 
 License Information
