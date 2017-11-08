@@ -3,7 +3,7 @@ infinityPV INA219 Arduino Library
 
 ![LiBAT5V2A](https://github.com/infinityPV/infinityPV_INA219_Arduino-library/blob/master/extras/LiBAT5V2A%20picture1.jpg)
 
-[*LiBAT5V2A Multiplatform *](https://www.infinitypv.com) 
+[*LiBAT5V2A Multiplatform *](https://infinitypv.com/products/electronics/libat5v2a) 
 
 
 This is an Arduino IDE library for monitoring voltage/current at different points in the infinityPV LiBAT5V2A evaluation board
