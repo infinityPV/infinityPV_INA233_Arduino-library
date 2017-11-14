@@ -52,14 +52,14 @@ void setup(void)
   
   Serial.println("Measuring voltage and current with INA219 ...");
   IC2.begin();
-  IC2_calValue=IC2.setCalibration(0.05,1);
-  IC2_configRegister=IC2.setSettings(0.05,1,5);
+  IC2_calValue=IC2.setCalibration(0.05,2);
+  IC2_configRegister=IC2.setSettings(0.05,2,5);
   IC3.begin();
-  IC3_calValue=IC3.setCalibration(0.05,1);
-  IC3_configRegister=IC3.setSettings(0.05,1,5);
+  IC3_calValue=IC3.setCalibration(0.05,2);
+  IC3_configRegister=IC3.setSettings(0.05,2,5);
   IC5.begin();
-  IC5_calValue=IC5.setCalibration(0.01,2);
-  IC5_configRegister=IC5.setSettings(0.01,2,5);
+  IC5_calValue=IC5.setCalibration(0.05,2);
+  IC5_configRegister=IC5.setSettings(0.05,2,5);
 }
 
 void loop(void) 
