@@ -1,7 +1,7 @@
 infinityPV INA233 Arduino Library
 ========================================
 
-![LiBAT5V2A](https://github.com/infinityPV/infinityPV_INA233_Arduino-library/blob/master/extras/LiBAT5V2A picture1.jpg)
+![LiBAT5V2A](https://github.com/infinityPV/infinityPV_INA233_Arduino-library/blob/master/extras/libat5v2a-ardu-solar-cell.jpg)
 
 [*LiBAT5V2A Multiplatform *](https://infinitypv.com/products/electronics/libat5v2a) 
 
