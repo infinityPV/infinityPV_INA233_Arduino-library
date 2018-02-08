@@ -53,17 +53,44 @@
     #define INA233_READ                            (0x01)
 /*=========================================================================*/
 
-/*=========================================================================
+/*=====================================================================================================================
     PMBus Commands 
     	    NAME				CODE 	FUNCTION	R/W	Number of Data Bytes 	Default value
-     -----------------------------------------------------------------------*/
+     -----------------------------------------------------------------------------------------------------------------*/
     
     #define CLEAR_FAULTS			(0x03)	//Clears the status registers and rearms the black box registers for udpating SB 0 N/A
-    #define RESTORE_DEFAULT_ALL			(0x12)	//Restores internal registers to the default values SB 0 N/A
-    #define CAPABILITY				(0x19)	//Retrieves the device capability	R 1 xB0
-    #define IOUT_OC_WARN_LIMIT			(0x4A)	//Retrieves or stores the output overcurrent warn limit threshold  R/W 2 x7FF8
-    #define VIN_OV_WARN_LIMIT			(0x57)  //Retrieves or stores the input overvoltage warn limit threshold   R/W 2 x7FF8
-    
+    #define RESTORE_DEFAULT_ALL			(0x12)	//Restores internal registers to the default values 			SB 0 N/A
+    #define CAPABILITY				(0x19)	//Retrieves the device capability					R 1 xB0
+    #define IOUT_OC_WARN_LIMIT			(0x4A)	//Retrieves or stores the output overcurrent warn limit threshold  	R/W 2 x7FF8
+    #define VIN_OV_WARN_LIMIT			(0x57)  //Retrieves or stores the input overvoltage warn limit threshold   	R/W 2 x7FF8
+    #define VIN_UV_WARN_LIMIT			(0x58)  //Retrieves or stores the input undervoltage warn limit threshold  	R/W 2 x0000
+    #define PIN_OP_WARN_LIMIT			(0x6B)  //Retrieves or stores the output overpower warn limit threshold    	R/W 2 x7FF8
+    #define STATUS_BYTE				(0x78)  //Retrieves information about the device operating status          	R 1 x00
+    #define STATUS_WORD				(0x79)  //Retrieves information about the device operating status          	R 2 x1000
+    #define STATUS_IOUT				(0x7B)  //Retrieves information about the output current status          	R/W,CLR 1 x00
+    #define STATUS_INPUT			(0x7C)  //Retrieves information about the input status          	        R/W,CLR 1 x00
+    #define STATUS_CML				(0x7E)  //Retrieves information about the communications status          	R/W,CLR 1 x00
+    #define STATUS_MFR_SPECIFIC			(0x80)  //Retrieves information about the manufacturer specific device status   R/W,CLR 1 x20
+    #define READ_EIN				(0x86)	//Retrieves the energy reading measurement				Block_R 6 6 bytes at x00
+    #define READ_VIN				(0x88)	//Retrieves the measurement for the VBUS voltage			R 2 0x0000
+    #define READ_IIN				(0x89)	//Retrieves the input current measurement, supports both + and - currents R 2 0x0000
+    #define READ_VOUT				(0x8B)	//Mirrors READ_VIN							R 2 0x0000
+    #define READ_IOUT				(0x8C)	//Mirrors READ_IIN for compatibility 					R 2 0x0000
+    #define READ_POUT				(0x96)	//Mirrors READ_PIN for compatibility with possible VBUS connections	R 2 0x0000
+    #define READ_PIN				(0x97)	//Retrieves the input power measurement					R 2 0x0000
+    #define MFR_ID				(0x99)	//Retrieves the manufacturer ID in ASCII Characters (TI)		Block_R 2 0x54, 0x49
+    #define MFR_MODEL				(0x9A)	//Retrieves the device number in ASCII Characters (INA233)		Block_R 6 0x49, 0x4E, 0x41, 0x32, 0x33, 0x330
+    #define MFR_REVISION			(0x9B)	//Retrieves the device revision letter and number in ASCII (e.g.A0)	R 2 0x41,0x30
+    #define MFR_ADC_CONFIG			(0xD0)	//Configures the ADC averaging modes, conversion times, and opr. modes  R/W 2 0x4127
+    #define MFR_READ_VSHUNT			(0xD1)	//Retrieves the shunt voltage measurement				R 2 0x0000
+    #define MFR_ALERT_MASK			(0xD2)	//Allows masking of device warnings					R/W 1 0xF0
+    #define MFR_CALIBRATION			(0xD4)	//Allows the value of the current-sense resistor calibration value to be input.
+						        //Must be programed at power-up. Default value is set to 1. 		R/W 2 0x0001
+    #define MFR_DEVICE_CONFIG			(0xD5)	//Allows the ALERT pin polarity to be changed				R/W 1 0x02
+    #define CLEAR_EIN				(0xD6)	//Clears the energy accumulator						S_B 0 N/A
+    #define TI_MFR_ID				(0xE0)	//Returns a unique word for the manufacturer ID				R 2 0x5449 (TI in ASCII)
+    #define TI_MFR_MODEL			(0xE1)	//Returns a unique word for the manufacturer model			R 2 33 in ASCII
+    #define TI_MFR_REVISION			(0xE2)	//Returns a unique word for the manufacturer revision			R 2 A0 in ASCII
 
 /*=========================================================================*//*=========================================================================
 
