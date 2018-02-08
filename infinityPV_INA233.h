@@ -54,22 +54,16 @@
 /*=========================================================================*/
 
 /*=========================================================================
-    // MASKS to CODE the CAL_OUTPUT (8 bits status variable)
-    // -----------------------------------------------------------------------*/
-    // //LSB bit 0 defines the VBUS_MAX
-    // #define VBUS_MAX16                            (0x00)  // 00000000 Bit0=0 -> VBUS_MAX16
-    // #define VBUS_MAX32                            (0x01)  // 00000001 Bit0=1 -> VBUS_MAX32
-    // // bits 2-1 define the PGA for the V_Shunt_max
-    // #define PGA_1                                 (0x00)  // 00000000 40mV scale (20mV with VBUS=16)
-    // #define PGA_2                                 (0x02)  // 00000010 80mV scale (40mV with VBUS=16)
-    // #define PGA_4                                 (0x04)  // 00000100 160mV scale (80mV with VBUS=16)
-    // #define PGA_8                                 (0x06)  // 00000110 320mV scale (160mV with VBUS=16)
-    // //bit 3 defines a error because the selected r_shunt and i_max lead to higher scale than possible with INA233
-    // #define PGA_OUT                               (0x08)  // 00001000 out of scale
-    // //MSB bit 7 defines if the max voltage to measure is higher than the maximum allowed in INA233 (26V)
-    // #define V_MAX_HIGH26                          (0x80)  // 10000000
-
-
+    PMBus Commands 
+    	    NAME				CODE 	FUNCTION	R/W	Number of Data Bytes 	Default value
+     -----------------------------------------------------------------------*/
+    
+    #define CLEAR_FAULTS			(0x03)	//Clears the status registers and rearms the black box registers for udpating SB 0 N/A
+    #define RESTORE_DEFAULT_ALL			(0x12)	//Restores internal registers to the default values SB 0 N/A
+    #define CAPABILITY				(0x19)	//Retrieves the device capability	R 1 xB0
+    #define IOUT_OC_WARN_LIMIT			(0x4A)	//Retrieves or stores the output overcurrent warn limit threshold  R/W 2 x7FF8
+    #define VIN_OV_WARN_LIMIT			(0x57)  //Retrieves or stores the input overvoltage warn limit threshold   R/W 2 x7FF8
+    
 
 /*=========================================================================*//*=========================================================================
 
