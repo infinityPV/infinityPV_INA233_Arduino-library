@@ -19,7 +19,7 @@
   All rights reserved
 	@section  HISTORY
 
-    v1.0  - First release Sep 2018
+    v1.0  - First release Feb 2018
 */
 /**************************************************************************/
 #if ARDUINO >= 100
@@ -54,13 +54,53 @@ void INA233::wireWriteRegister (uint8_t reg, uint16_t value)
 
 /**************************************************************************/
 /*!
+    @brief  Reads a Block of 6 bytes from the INA233 over I2C
+    When reading a block in PMBUS the first byte from the slave is the
+    block size (6 in this case), so the request must be for block_size+1
+*/
+/**************************************************************************/
+void INA233::wireReadBlock(uint8_t reg, uint8_t value[6])
+{
+  int i;
+  uint8_t block_size;
+  Wire.requestFrom(ina233_i2caddr,(uint8_t)7,reg,(uint8_t)1,(uint8_t)true);
+  block_size=Wire.read();
+  for (i=0;i<block_size;i++)
+  {
+    value[i]=Wire.read();
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Reads a 16 bit value from the INA233 over I2C
+*/
+/**************************************************************************/
+void INA233::wireReadWord(uint8_t reg, uint16_t *value)
+{
+  Wire.requestFrom(ina233_i2caddr,(uint8_t)2,reg,(uint8_t)1,(uint8_t)true);
+  *value = Wire.read();
+  *value=((Wire.read() << 8) | *value);
+}
+/**************************************************************************/
+/*!
+    @brief  Reads a 8 bit value from the INA233 over I2C
+*/
+/**************************************************************************/
+void INA233::wireReadByte(uint8_t reg, uint8_t *value)
+{
+  Wire.requestFrom(ina233_i2caddr,(uint8_t)1,reg,(uint8_t)1,(uint8_t)true);
+  *value = Wire.read();
+}
+/**************************************************************************/
+/*!
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
 void INA233::wireReadRegister(uint8_t reg, uint16_t *value)
 {
 
-  Wire.beginTransmission(ina219_i2caddr);
+  Wire.beginTransmission(ina233_i2caddr);
   #if ARDUINO >= 100
     Wire.write(reg);                       // Register
   #else
@@ -96,8 +136,9 @@ void INA233::wireReadRegister(uint8_t reg, uint16_t *value)
 /**************************************************************************/
 uint16_t INA233::setSettings(float r_shunt, float i_max, float v_max)
 {
+
   //TODO
-return(uint16_t)config;
+return(uint16_t)0xFF;
 }
 
 /**************************************************************************/
@@ -110,7 +151,7 @@ return(uint16_t)config;
 uint16_t INA233::setCalibration(float r_shunt,float i_max)
 {
   //TODO
-return(uint16_t)ina233_calValue;
+return(uint16_t)0xFF;
 }
 
 /**************************************************************************/
@@ -153,7 +194,7 @@ int16_t INA233::getBusVoltage_raw() {
 /**************************************************************************/
 int16_t INA233::getShuntVoltage_raw() {
   uint16_t value;
-  wireReadRegister(INA219_REG_SHUNTVOLTAGE, &value);
+  wireReadRegister(INA233_REG_SHUNTVOLTAGE, &value);
   return (int16_t)value;
 }
 
@@ -206,6 +247,6 @@ float INA233::getBusVoltage_V() {
 /**************************************************************************/
 float INA233::getCurrent_mA() {
   float valueDec = getCurrent_raw();
-  valueDec /= ina219_currentDivider_mA;
+  valueDec /= ina233_currentDivider_mA;
   return valueDec;
 }
