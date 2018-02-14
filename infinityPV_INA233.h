@@ -54,10 +54,10 @@
 /*=========================================================================*/
 
 /*=====================================================================================================================
-    PMBus Commands 
+    PMBus Commands
     	    NAME				CODE 	FUNCTION	R/W	Number of Data Bytes 	Default value
      -----------------------------------------------------------------------------------------------------------------*/
-    
+
     #define CLEAR_FAULTS			(0x03)	//Clears the status registers and rearms the black box registers for udpating SB 0 N/A
     #define RESTORE_DEFAULT_ALL			(0x12)	//Restores internal registers to the default values 			SB 0 N/A
     #define CAPABILITY				(0x19)	//Retrieves the device capability					R 1 xB0
@@ -79,7 +79,7 @@
     #define READ_POUT				(0x96)	//Mirrors READ_PIN for compatibility with possible VBUS connections	R 2 0x0000
     #define READ_PIN				(0x97)	//Retrieves the input power measurement					R 2 0x0000
     #define MFR_ID				(0x99)	//Retrieves the manufacturer ID in ASCII Characters (TI)		Block_R 2 0x54, 0x49
-    #define MFR_MODEL				(0x9A)	//Retrieves the device number in ASCII Characters (INA233)		Block_R 6 0x49, 0x4E, 0x41, 0x32, 0x33, 0x330
+    #define MFR_MODEL				(0x9A)	//Retrieves the device number in ASCII Characters (INA233)		Block_R 6 0x49, 0x4E, 0x41, 0x32, 0x33, 0x33
     #define MFR_REVISION			(0x9B)	//Retrieves the device revision letter and number in ASCII (e.g.A0)	R 2 0x41,0x30
     #define MFR_ADC_CONFIG			(0xD0)	//Configures the ADC averaging modes, conversion times, and opr. modes  R/W 2 0x4127
     #define MFR_READ_VSHUNT			(0xD1)	//Retrieves the shunt voltage measurement				R 2 0x0000
@@ -173,7 +173,7 @@
 
 class INA233{
  public:
-  INA219(uint8_t addr = INA233_ADDRESS_45);
+  INA233(uint8_t addr = INA233_ADDRESS_45);
   void begin(void);
   float getBusVoltage_V(void);
   float getShuntVoltage_mV(void);
@@ -183,6 +183,9 @@ class INA233{
   int16_t getCurrent_raw(void);
   uint16_t setSettings(float r_shunt, float i_max, float v_max);
   uint16_t setCalibration(float r_shunt, float i_max);
+  void wireReadWord(uint8_t reg, uint16_t *value);
+  void wireReadByte(uint8_t reg, uint8_t *value);
+  void wireReadBlock(uint8_t reg, uint8_t value[6]);
 
  private:
   uint8_t ina233_i2caddr;
