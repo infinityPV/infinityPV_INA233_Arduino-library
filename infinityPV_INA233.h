@@ -85,7 +85,7 @@
     #define MFR_READ_VSHUNT			(0xD1)	//Retrieves the shunt voltage measurement				R 2 0x0000
     #define MFR_ALERT_MASK			(0xD2)	//Allows masking of device warnings					R/W 1 0xF0
     #define MFR_CALIBRATION			(0xD4)	//Allows the value of the current-sense resistor calibration value to be input.
-						        //Must be programed at power-up. Default value is set to 1. 		R/W 2 0x0001
+						                            //Must be programed at power-up. Default value is set to 1. 		R/W 2 0x0001
     #define MFR_DEVICE_CONFIG			(0xD5)	//Allows the ALERT pin polarity to be changed				R/W 1 0x02
     #define CLEAR_EIN				(0xD6)	//Clears the energy accumulator						S_B 0 N/A
     #define TI_MFR_ID				(0xE0)	//Returns a unique word for the manufacturer ID				R 2 0x5449 (TI in ASCII)
@@ -186,6 +186,8 @@ class INA233{
   void wireReadWord(uint8_t reg, uint16_t *value);
   void wireReadByte(uint8_t reg, uint8_t *value);
   void wireReadBlock(uint8_t reg, uint8_t value[6]);
+  void wireWriteWord(uint8_t reg, uint16_t value);
+  void wireSendByte(uint8_t reg);
 
  private:
   uint8_t ina233_i2caddr;
