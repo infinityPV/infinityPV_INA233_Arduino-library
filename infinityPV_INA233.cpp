@@ -54,6 +54,42 @@ void INA233::wireWriteRegister (uint8_t reg, uint16_t value)
 
 /**************************************************************************/
 /*!
+    @brief  Writes a byte over I2C, no data are sent, only the
+    PMBus comand (reg).
+*/
+/**************************************************************************/
+void INA233::wireSendByte(uint8_t reg)
+{
+  Wire.beginTransmission(ina233_i2caddr);
+  #if ARDUINO >= 100
+    Wire.write(reg);                       // PMBus command
+  #else
+    Wire.send(reg);                        // PMBus command
+  #endif
+  Wire.endTransmission();
+}
+/**************************************************************************/
+/*!
+    @brief  Writes a word (value) to the specified register
+    by the PMBus comand (reg) over I2C
+*/
+/**************************************************************************/
+void INA233::wireWriteWord (uint8_t reg, uint16_t value)
+{
+  Wire.beginTransmission(ina233_i2caddr);
+  #if ARDUINO >= 100
+    Wire.write(reg);                       // PMBus command
+    Wire.write(value & 0xFF);              // Lower 8-bits
+    Wire.write((value >> 8) & 0xFF);       // Upper 8-bits
+  #else
+    Wire.send(reg);                        // PMBus command
+    Wire.send(value & 0xFF);               // Lower 8-bits
+    Wire.send(value >> 8);                 // Upper 8-bits
+  #endif
+  Wire.endTransmission();
+}
+/**************************************************************************/
+/*!
     @brief  Reads a Block of 6 bytes from the INA233 over I2C
     When reading a block in PMBUS the first byte from the slave is the
     block size (6 in this case), so the request must be for block_size+1
@@ -92,33 +128,7 @@ void INA233::wireReadByte(uint8_t reg, uint8_t *value)
   Wire.requestFrom(ina233_i2caddr,(uint8_t)1,reg,(uint8_t)1,(uint8_t)true);
   *value = Wire.read();
 }
-/**************************************************************************/
-/*!
-    @brief  Reads a 16 bit values over I2C
-*/
-/**************************************************************************/
-void INA233::wireReadRegister(uint8_t reg, uint16_t *value)
-{
 
-  Wire.beginTransmission(ina233_i2caddr);
-  #if ARDUINO >= 100
-    Wire.write(reg);                       // Register
-  #else
-    Wire.send(reg);                        // Register
-  #endif
-  Wire.endTransmission();
-
-  delay(1); // Max 12-bit conversion time is 586us per sample
-
-  Wire.requestFrom(ina233_i2caddr, (uint8_t)2);
-  #if ARDUINO >= 100
-    // Shift values to create properly formed integer
-    *value = ((Wire.read() << 8) | Wire.read());
-  #else
-    // Shift values to create properly formed integer
-    *value = ((Wire.receive() << 8) | Wire.receive());
-  #endif
-}
 
 /**************************************************************************/
 /*!
