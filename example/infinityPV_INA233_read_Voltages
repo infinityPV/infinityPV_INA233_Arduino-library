@@ -20,6 +20,7 @@ void loop() {
 
   voltage_IC1=IC1.getBusVoltage_V();  //getting bus voltage (V) at INA233 IC1
   voltage_IC2=IC2.getBusVoltage_V();  //getting bus voltage (V) at INA233 IC2
+
   
   Serial.print(" Battery voltage:   "); Serial.print(voltage_IC2);Serial.println(" V");
   Serial.print(" Output voltage:   "); Serial.print(voltage_IC1);Serial.println(" V");
