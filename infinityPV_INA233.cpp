@@ -186,25 +186,26 @@ void INA233::begin() {
 
 /**************************************************************************/
 /*!
-    @brief  Gets the raw bus voltage (16-bit signed integer, so +-32767)
+    @brief  Gets the raw bus voltage (2-byte, two's complement integer
+    received from the device)
 */
 /**************************************************************************/
 int16_t INA233::getBusVoltage_raw() {
   uint16_t value;
-  wireReadRegister(INA233_REG_BUSVOLTAGE, &value);
+  wireReadWord(READ_VIN, &value);
 
-  // Shift to the right 3 to drop CNVR and OVF and multiply by LSB
-  return (int16_t)((value >> 3) * 4);
+  return (int16_t)value;
 }
 
 /**************************************************************************/
 /*!
-    @brief  Gets the raw shunt voltage (16-bit signed integer, so +-32767)
+    @brief  Gets the raw shunt voltage (2-byte, two's complement integer
+    received from the device)
 */
 /**************************************************************************/
 int16_t INA233::getShuntVoltage_raw() {
   uint16_t value;
-  wireReadRegister(INA233_REG_SHUNTVOLTAGE, &value);
+  wireReadWord(MFR_READ_VSHUNT, &value);
   return (int16_t)value;
 }
 
@@ -230,13 +231,14 @@ int16_t INA233::getCurrent_raw() {
 
 /**************************************************************************/
 /*!
-    @brief  Gets the shunt voltage in mV (so +-327mV)
+    @brief  Gets the shunt voltage in mV
 */
 /**************************************************************************/
 float INA233::getShuntVoltage_mV() {
-  int16_t value;
-  value = getShuntVoltage_raw();
-  return value * 0.01;
+  uint16_t value=getShuntVoltage_raw();
+  float vshunt;
+  vshunt=(value*pow(10,-R_vs)-b_vs)/m_vs;
+  return vshunt * 0.01;
 }
 
 /**************************************************************************/
@@ -245,8 +247,10 @@ float INA233::getShuntVoltage_mV() {
 */
 /**************************************************************************/
 float INA233::getBusVoltage_V() {
-  int16_t value = getBusVoltage_raw();
-  return value * 0.001;
+  uint16_t value=getBusVoltage_raw();
+  float vbus;
+  vbus =(value*pow(10,-R_vb)-b_vb)/m_vb;
+  return vbus;
 }
 
 /**************************************************************************/
