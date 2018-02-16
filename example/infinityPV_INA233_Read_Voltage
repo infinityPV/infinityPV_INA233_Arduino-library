@@ -1,0 +1,29 @@
+#include <Wire.h>
+#include <infinityPV_INA233.h>
+
+//I2C Adresses for the 2 INA233 on board 
+INA233 IC1(0x45);  // IC1 address 0x45 1000101 
+INA233 IC2(0x44);  // IC2 address 0x44 1000100 
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Hej!");
+  
+  Serial.println("Measuring voltage at IC1 and IC2 INA233 at LiBAT5V2A Energy Management Shield");
+  IC1.begin();
+  IC2.begin();
+}
+
+void loop() {
+  float voltage_IC1=0;
+  float voltage_IC2=0;
+
+  voltage_IC1=IC1.getBusVoltage_V();  //getting bus voltage (V) at INA233 IC1
+  voltage_IC2=IC2.getBusVoltage_V();  //getting bus voltage (V) at INA233 IC2
+  
+  Serial.print(" Battery voltage:   "); Serial.print(voltage_IC2);Serial.println(" V");
+  Serial.print(" Output voltage:   "); Serial.print(voltage_IC1);Serial.println(" V");
+  
+  delay(2000);
+
+}
