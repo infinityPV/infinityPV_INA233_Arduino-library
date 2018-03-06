@@ -32,6 +32,13 @@
 
 #include "infinityPV_INA233.h"
 
+
+//global variables?
+//uint16_t m_c=0;
+//uint8_t R_c=0;
+//uint16_t m_p=0;
+//uint8_t R_p=0;
+
 /**************************************************************************/
 /*!
     @brief  Sends a single command byte over I2C
@@ -155,13 +162,111 @@ return(uint16_t)0xFF;
 /*!
     @brief  Set INA233 Calibration register for measuring based on the user's
     inputs r_shunt and i_max.
+    -inputs: value of the shunt resistor and maximum current (in ohms and A)
+    -inputs as outputs: measuring accuracy for current (uA) and power (mW) and
+    ERROR state for possible errors during Calibration.
+    -outputs: the CAL value to be written in MFR_CALIBRATION
 
     */
 /**************************************************************************/
-uint16_t INA233::setCalibration(float r_shunt,float i_max)
+uint16_t INA233::setCalibration(float r_shunt,float i_max,float *Current_LSB,float *Power_LSB, int16_t *m_c,int8_t *R_c, int16_t *m_p, int8_t *R_p,  uint8_t *ERROR)
 {
-  //TODO
-return(uint16_t)0xFF;
+  float C_LSB=0;
+  float P_LSB=0;
+  float CAL=0;
+  float m_c_F=0;
+  float m_p_F=0;
+  int32_t aux=0;
+  bool round_done=false;
+  int8_t local_R_c=0;
+  int8_t local_R_p=0;
+  uint8_t local_ERROR=0;
+
+  C_LSB=i_max/pow(2,15);
+  P_LSB=25*C_LSB;
+  *Current_LSB=C_LSB*1000000;
+  *Power_LSB=P_LSB*1000;
+  CAL=0.00512/(r_shunt*C_LSB);
+
+  //Check CAL is in the uint16 range
+  if (CAL>0xFFFF)
+  {
+    local_ERROR=1;
+  }
+  else
+  {
+  wireWriteWord(MFR_CALIBRATION, (uint16_t)CAL);  
+  }
+  m_c_F=1/C_LSB;
+  m_p_F=1/P_LSB;
+
+  //Calculate m and R for maximum accuracy in current measurement
+  aux=(int32_t)m_c_F;
+  while ((aux>32768)||(aux<-32768))
+  {
+    m_c_F=m_c_F/10;
+    local_R_c++;
+    aux=(int32_t)m_c_F;
+  }
+  while (round_done==false)
+  {
+    aux=(int32_t)m_c_F;
+    if (aux==m_c_F)
+    {
+      round_done=true;
+    }
+    else
+    {
+       aux=(int32_t)(m_c_F*10);             //shift decimal to the right
+       if ((aux>32768)||(aux<-32768))       //m_c is out of int16 (-32768 to 32768)
+       {
+        round_done=true;
+       }
+       else
+       {
+        m_c_F=m_c_F*10;
+        local_R_c--;
+       }
+    }
+  }
+
+round_done=false;
+  //Calculate m and R for maximum accuracy in power measurement
+  aux=(int32_t)m_p_F;
+  while ((aux>32768)||(aux<-32768))
+  {
+    m_p_F=m_p_F/10;
+    local_R_p++;
+    aux=(int32_t)m_p_F;
+  }
+  while (round_done==false)
+  {
+    aux=(int32_t)m_p_F;
+    if (aux==m_p_F)
+    {
+      round_done=true;
+    }
+    else
+    {
+       aux=(int32_t)(m_p_F*10);          //shift decimal to the right
+       if ((aux>32768)||(aux<-32768))       //m_p is out of int16 (-32768 to 32768)
+       {
+        round_done=true;
+       }
+       else
+       {
+        m_p_F=m_p_F*10;
+        local_R_p--;
+       }
+    }
+  }
+  *m_c=(int16_t)m_c_F;
+  *m_p=(int16_t)m_p_F;
+  *R_c=local_R_c;
+  *R_p=local_R_p;
+  *ERROR=local_ERROR;
+
+return(uint16_t)CAL;
 }
 
 /**************************************************************************/
