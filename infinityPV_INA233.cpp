@@ -139,27 +139,6 @@ void INA233::wireReadByte(uint8_t reg, uint8_t *value)
 
 /**************************************************************************/
 /*!
-    @brief  Set INA233 Config register for measuring based on the user's inputs
-    r_shunt, i_max, and v_max.
-    The function tries to find the best calibration for INA233 for the given
-    i_max, r_shunt and v_max.
-    It evaluates the v_shunt_max=v_bus_max/100/(8/pga) for the different PGA (1, 2, 4, 8) and V_bus_max (16,32)
-    options, with the expected v_shunt_max_exp=i_max*r_shunt
-    INPUTS:
-    - r_shunt, is the value of the shunt resistor in Ohms
-    - i_max, is the maximum expected current to measure in A.
-    - v_max, is the maximum expected voltage to measure in V.
-    */
-/**************************************************************************/
-uint16_t INA233::setSettings(float r_shunt, float i_max, float v_max)
-{
-
-  //TODO
-return(uint16_t)0xFF;
-}
-
-/**************************************************************************/
-/*!
     @brief  Set INA233 Calibration register for measuring based on the user's
     inputs r_shunt and i_max.
     -inputs: value of the shunt resistor and maximum current (in ohms and A)
