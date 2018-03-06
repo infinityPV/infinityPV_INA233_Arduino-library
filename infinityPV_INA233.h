@@ -184,7 +184,6 @@ class INA233{
   int16_t getBusVoltage_raw(void);
   int16_t getShuntVoltage_raw(void);
   int16_t getCurrent_raw(void);
-  uint16_t setSettings(float r_shunt, float i_max, float v_max);
   uint16_t setCalibration(float r_shunt,float i_max,float *Current_LSB,float *Power_LSB, int16_t *m_c,int8_t *R_c, int16_t *m_p, int8_t *R_p,  uint8_t *ERROR);
   void wireReadWord(uint8_t reg, uint16_t *value);
   void wireReadByte(uint8_t reg, uint8_t *value);
