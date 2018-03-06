@@ -1,5 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 // 
+// infinityPV_INA233_Read_voltage.ino
+//
 // This is an example for using the LiBAT5V2A Energy Management shield    
 // from infinityPV with Arduino.                                    
 // The board contains 2 INA233 Analog to I2C converters             
