@@ -37,6 +37,9 @@
 //  you should change the shunt_resistor or the max. expected current values until
 //  the CALIBRATION value is in range and Set_ERROR returns 0. 
 //
+// (*) This example uses the infinityPV_INA233 library, which licensed 
+// under BSD license. 
+//
 //////////////////////////////////////////////////////////////////////
 
 
