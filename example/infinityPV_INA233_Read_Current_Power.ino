@@ -66,7 +66,7 @@ void setup() {
   
   Serial.begin(9600);
   Serial.println("Hej!");
-  Serial.println("Measuring instantaneous values from IC1 and IC2:");
+  Serial.println("Measuring instantaneous values at IC1 and IC2 INA233 at LiBAT5V2A Energy Management Shield:");
   IC1.begin();
   IC2.begin();
 
