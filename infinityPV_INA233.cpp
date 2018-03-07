@@ -58,7 +58,6 @@ void INA233::wireWriteRegister (uint8_t reg, uint16_t value)
   #endif
   Wire.endTransmission();
 }
-
 /**************************************************************************/
 /*!
     @brief  Writes a byte over I2C, no data are sent, only the
@@ -135,8 +134,6 @@ void INA233::wireReadByte(uint8_t reg, uint8_t *value)
   Wire.requestFrom(ina233_i2caddr,(uint8_t)1,reg,(uint8_t)1,(uint8_t)true);
   *value = Wire.read();
 }
-
-
 /**************************************************************************/
 /*!
     @brief  Set INA233 Calibration register for measuring based on the user's
@@ -148,7 +145,7 @@ void INA233::wireReadByte(uint8_t reg, uint8_t *value)
 
     */
 /**************************************************************************/
-uint16_t INA233::setCalibration(float r_shunt,float i_max,float *Current_LSB,float *Power_LSB, int16_t *m_c,int8_t *R_c, int16_t *m_p, int8_t *R_p,  uint8_t *ERROR)
+uint16_t INA233::setCalibration(float r_shunt,float i_max,float *Current_LSB,float *Power_LSB, int16_t *mc,int8_t *Rc, int16_t *mp, int8_t *Rp,  uint8_t *ERROR)
 {
   float C_LSB=0;
   float P_LSB=0;
@@ -169,85 +166,88 @@ uint16_t INA233::setCalibration(float r_shunt,float i_max,float *Current_LSB,flo
 
   //Check CAL is in the uint16 range
   if (CAL>0xFFFF)
-  {
-    local_ERROR=1;
-  }
+    {
+      local_ERROR=1;
+    }
   else
-  {
-  wireWriteWord(MFR_CALIBRATION, (uint16_t)CAL);  
-  }
+    {
+    wireWriteWord(MFR_CALIBRATION, (uint16_t)CAL);
+    }
   m_c_F=1/C_LSB;
   m_p_F=1/P_LSB;
 
   //Calculate m and R for maximum accuracy in current measurement
   aux=(int32_t)m_c_F;
   while ((aux>32768)||(aux<-32768))
-  {
-    m_c_F=m_c_F/10;
-    local_R_c++;
-    aux=(int32_t)m_c_F;
-  }
+    {
+      m_c_F=m_c_F/10;
+      local_R_c++;
+      aux=(int32_t)m_c_F;
+    }
   while (round_done==false)
-  {
-    aux=(int32_t)m_c_F;
-    if (aux==m_c_F)
     {
-      round_done=true;
-    }
-    else
-    {
-       aux=(int32_t)(m_c_F*10);             //shift decimal to the right
-       if ((aux>32768)||(aux<-32768))       //m_c is out of int16 (-32768 to 32768)
-       {
+      aux=(int32_t)m_c_F;
+      if (aux==m_c_F)
+      {
         round_done=true;
-       }
-       else
-       {
-        m_c_F=m_c_F*10;
-        local_R_c--;
-       }
+      }
+      else
+      {
+         aux=(int32_t)(m_c_F*10);             //shift decimal to the right
+         if ((aux>32768)||(aux<-32768))       //m_c is out of int16 (-32768 to 32768)
+         {
+          round_done=true;
+         }
+         else
+         {
+          m_c_F=m_c_F*10;
+          local_R_c--;
+         }
+      }
     }
-  }
-
-round_done=false;
+  round_done=false;
   //Calculate m and R for maximum accuracy in power measurement
   aux=(int32_t)m_p_F;
   while ((aux>32768)||(aux<-32768))
-  {
-    m_p_F=m_p_F/10;
-    local_R_p++;
-    aux=(int32_t)m_p_F;
-  }
+    {
+      m_p_F=m_p_F/10;
+      local_R_p++;
+      aux=(int32_t)m_p_F;
+    }
   while (round_done==false)
-  {
-    aux=(int32_t)m_p_F;
-    if (aux==m_p_F)
     {
-      round_done=true;
-    }
-    else
-    {
-       aux=(int32_t)(m_p_F*10);          //shift decimal to the right
-       if ((aux>32768)||(aux<-32768))       //m_p is out of int16 (-32768 to 32768)
-       {
+      aux=(int32_t)m_p_F;
+      if (aux==m_p_F)
+      {
         round_done=true;
-       }
-       else
-       {
-        m_p_F=m_p_F*10;
-        local_R_p--;
-       }
+      }
+      else
+      {
+         aux=(int32_t)(m_p_F*10);          //shift decimal to the right
+         if ((aux>32768)||(aux<-32768))       //m_p is out of int16 (-32768 to 32768)
+         {
+          round_done=true;
+         }
+         else
+         {
+          m_p_F=m_p_F*10;
+          local_R_p--;
+         }
+      }
     }
-  }
-  *m_c=(int16_t)m_c_F;
-  *m_p=(int16_t)m_p_F;
-  *R_c=local_R_c;
-  *R_p=local_R_p;
+  *mp=m_p_F;
+  *mc=m_c_F;
+  *Rc=local_R_c;
+  *Rp=local_R_p;
   *ERROR=local_ERROR;
 
-return(uint16_t)CAL;
-}
+  m_c=int16_t(m_c_F);
+  m_p=int16_t(m_p_F);
+  R_c=local_R_c;
+  R_p=local_R_p;
 
+  return(uint16_t)CAL;
+}
 /**************************************************************************/
 /*!
     @brief  Instantiates a new INA233 class
@@ -255,19 +255,19 @@ return(uint16_t)CAL;
 /**************************************************************************/
 INA233::INA233(uint8_t addr) {
   ina233_i2caddr = addr;
-  ina233_currentDivider_mA = 0;
-  ina233_powerDivider_mW = 0;
+  m_c=0;
+  R_c=0;
+  m_p=0;
+  R_p=0;
 }
-
 /**************************************************************************/
 /*!
-    @brief  Setups the HW (defaults to 32V and 2A for calibration values)
+    @brief  Setups the HW
 */
 /**************************************************************************/
 void INA233::begin() {
   Wire.begin();
 }
-
 /**************************************************************************/
 /*!
     @brief  Gets the raw bus voltage (2-byte, two's complement integer
@@ -280,7 +280,6 @@ int16_t INA233::getBusVoltage_raw() {
 
   return (int16_t)value;
 }
-
 /**************************************************************************/
 /*!
     @brief  Gets the raw shunt voltage (2-byte, two's complement integer
@@ -292,27 +291,65 @@ int16_t INA233::getShuntVoltage_raw() {
   wireReadWord(MFR_READ_VSHUNT, &value);
   return (int16_t)value;
 }
-
 /**************************************************************************/
 /*!
-    @brief  Gets the raw current value (16-bit signed integer, so +-32767)
+    @brief  Gets the raw current value (2-byte, two's complement integer
+    received from the device)
 */
 /**************************************************************************/
 int16_t INA233::getCurrent_raw() {
   uint16_t value;
-
-  // Sometimes a sharp load will reset the INA233, which will
-  // reset the cal register, meaning CURRENT and POWER will
-  // not be available ... avoid this by always setting a cal
-  // value even if it's an unfortunate extra step
-  wireWriteRegister(INA233_REG_CALIBRATION, ina233_calValue);
-
-  // Now we can safely read the CURRENT register!
-  wireReadRegister(INA233_REG_CURRENT, &value);
-
+  wireReadWord(READ_IIN, &value);
   return (int16_t)value;
 }
+/**************************************************************************/
+/*!
+    @brief  Gets the raw power value (2-byte, two's complement integer
+    received from the device)
+*/
+/**************************************************************************/
+int16_t INA233::getPower_raw() {
+  uint16_t value;
+  wireReadWord(READ_PIN, &value);
+  return (int16_t)value;
+}
+/**************************************************************************/
+/*!
+    @brief  Gets the raw energy info from READ_EIN register power accumulator
+    (2-byte), power accumulator roll over (1byte) and sample count (3bytes)
 
+*/
+/**************************************************************************/
+void INA233::getEnergy_raw(uint16_t* accumulator, uint8_t* roll_over, uint32_t* sample_count) {
+  uint8_t value[6];
+  uint32_t aux;
+  wireReadBlock(READ_EIN, value);
+  *accumulator=(value[1] << 8) | value[0];
+  *roll_over=value[2];
+  *sample_count=uint32_t(value[5])<< 16;
+  //*sample_count=((value[4] << 8) | *sample_count);
+  //*sample_count=((value[5] << 16) | *sample_count);
+
+}
+
+/**************************************************************************/
+/*!
+    @brief  Gets the averaged power from last reading of READ_EIN in mW
+*/
+/**************************************************************************/
+float INA233::getAv_Power_mW() {
+  uint16_t accumulator=0;
+  uint8_t roll_over=0;
+  uint32_t sample_count=0;
+  uint32_t accumulator_24=0;
+  float av_power=0;
+  getEnergy_raw(&accumulator,&roll_over, &sample_count);
+
+  accumulator_24=roll_over*0xFFFF+accumulator;
+
+  av_power=(accumulator_24*pow(10,-R_p)-b_p)/m_p;
+  return av_power * 0.01;
+}
 /**************************************************************************/
 /*!
     @brief  Gets the shunt voltage in mV
@@ -322,7 +359,7 @@ float INA233::getShuntVoltage_mV() {
   uint16_t value=getShuntVoltage_raw();
   float vshunt;
   vshunt=(value*pow(10,-R_vs)-b_vs)/m_vs;
-  return vshunt * 0.01;
+  return vshunt * 1000;
 }
 
 /**************************************************************************/
@@ -344,7 +381,21 @@ float INA233::getBusVoltage_V() {
 */
 /**************************************************************************/
 float INA233::getCurrent_mA() {
-  float valueDec = getCurrent_raw();
-  valueDec /= ina233_currentDivider_mA;
-  return valueDec;
+  uint16_t value=getCurrent_raw();
+  float current;
+  current =(value*pow(10,-R_c)-b_c)/m_c;
+  return current*1000;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Gets the power value in mW, taking into account the
+            config settings and power LSB
+*/
+/**************************************************************************/
+float INA233::getPower_mW() {
+  uint16_t value=getPower_raw();
+  float power;
+  power =(value*pow(10,-R_p)-b_p)/m_p;
+  return power*1000;
 }
