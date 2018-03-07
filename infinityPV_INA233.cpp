@@ -19,7 +19,7 @@
   All rights reserved
 	@section  HISTORY
 
-    v1.0  - First release Feb 2018
+    v1.0  - First release Mar 2018
 */
 /**************************************************************************/
 #if ARDUINO >= 100
@@ -33,44 +33,37 @@
 #include "infinityPV_INA233.h"
 
 
-//global variables?
-//uint16_t m_c=0;
-//uint8_t R_c=0;
-//uint16_t m_p=0;
-//uint8_t R_p=0;
-
-/**************************************************************************/
-/*!
-    @brief  Sends a single command byte over I2C
-*/
-/**************************************************************************/
-void INA233::wireWriteRegister (uint8_t reg, uint16_t value)
-{
-  Wire.beginTransmission(ina233_i2caddr);
-  #if ARDUINO >= 100
-    Wire.write(reg);                       // Register
-    Wire.write((value >> 8) & 0xFF);       // Upper 8-bits
-    Wire.write(value & 0xFF);              // Lower 8-bits
-  #else
-    Wire.send(reg);                        // Register
-    Wire.send(value >> 8);                 // Upper 8-bits
-    Wire.send(value & 0xFF);               // Lower 8-bits
-  #endif
-  Wire.endTransmission();
-}
 /**************************************************************************/
 /*!
     @brief  Writes a byte over I2C, no data are sent, only the
     PMBus comand (reg).
 */
 /**************************************************************************/
-void INA233::wireSendByte(uint8_t reg)
+void INA233::wireSendCmd(uint8_t reg)
 {
   Wire.beginTransmission(ina233_i2caddr);
   #if ARDUINO >= 100
     Wire.write(reg);                       // PMBus command
   #else
     Wire.send(reg);                        // PMBus command
+  #endif
+  Wire.endTransmission();
+}
+/**************************************************************************/
+/*!
+    @brief  Writes a byte (value) to the specified register
+    by the PMBus comand (reg) over I2C
+*/
+/**************************************************************************/
+void INA233::wireWriteByte (uint8_t reg, uint8_t value)
+{
+  Wire.beginTransmission(ina233_i2caddr);
+  #if ARDUINO >= 100
+    Wire.write(reg);                       // PMBus command
+    Wire.write(value);                     // byte to write
+  #else
+    Wire.send(reg);                        // PMBus command
+    Wire.send(value);                      // byte to write
   #endif
   Wire.endTransmission();
 }
@@ -322,16 +315,16 @@ int16_t INA233::getPower_raw() {
 /**************************************************************************/
 void INA233::getEnergy_raw(uint16_t* accumulator, uint8_t* roll_over, uint32_t* sample_count) {
   uint8_t value[6];
+  //uint8_t test[6] = { 0x00, 0x11,0x22,0x33,0x44,0x55};
   uint32_t aux;
   wireReadBlock(READ_EIN, value);
   *accumulator=(value[1] << 8) | value[0];
   *roll_over=value[2];
   *sample_count=uint32_t(value[5])<< 16;
-  //*sample_count=((value[4] << 8) | *sample_count);
-  //*sample_count=((value[5] << 16) | *sample_count);
+  *sample_count=((uint32_t(value[4])<< 8)| *sample_count);
+  *sample_count=(uint32_t(value[3])| *sample_count);
 
 }
-
 /**************************************************************************/
 /*!
     @brief  Gets the averaged power from last reading of READ_EIN in mW
@@ -342,13 +335,14 @@ float INA233::getAv_Power_mW() {
   uint8_t roll_over=0;
   uint32_t sample_count=0;
   uint32_t accumulator_24=0;
+  uint32_t raw_av_power=0;
   float av_power=0;
   getEnergy_raw(&accumulator,&roll_over, &sample_count);
+  accumulator_24=uint32_t(roll_over)*65536+uint32_t(accumulator);
+  raw_av_power=accumulator_24/sample_count;
 
-  accumulator_24=roll_over*0xFFFF+accumulator;
-
-  av_power=(accumulator_24*pow(10,-R_p)-b_p)/m_p;
-  return av_power * 0.01;
+  av_power=(raw_av_power*pow(10,-R_p)-b_p)/m_p;
+  return av_power * 1000;
 }
 /**************************************************************************/
 /*!
@@ -399,3 +393,4 @@ float INA233::getPower_mW() {
   power =(value*pow(10,-R_p)-b_p)/m_p;
   return power*1000;
 }
+
