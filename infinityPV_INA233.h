@@ -137,7 +137,8 @@ class INA233{
   void wireReadByte(uint8_t reg, uint8_t *value);
   void wireReadBlock(uint8_t reg, uint8_t value[6]);
   void wireWriteWord(uint8_t reg, uint16_t value);
-  void wireSendByte(uint8_t reg);
+  void wireWriteByte (uint8_t reg, uint8_t value);
+  void wireSendCmd(uint8_t reg);
 
  private:
   uint8_t ina233_i2caddr;
@@ -148,7 +149,4 @@ class INA233{
   int8_t R_c;
   int16_t m_p;
   int8_t R_p;
-  void wireWriteRegister(uint8_t reg, uint16_t value);
-  void wireReadRegister(uint8_t reg, uint16_t *value);
-
 };
