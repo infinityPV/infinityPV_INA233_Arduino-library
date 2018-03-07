@@ -12,10 +12,11 @@
 //
 // We show here how to write the INA233 registers through the I2C
 // bus, using PMBUS compatible commands. 
-// We have implemented 2 different functions to cover  the 
+// We have implemented 3 different functions to cover  the 
 // possible kind of writings to INA233 :send 1 byte (just the PMBUS command)
-// or write 1 words:
-//   -wireSendByte("PMBUS_COMMAND")
+// write 1 byte or 1 word:
+//   -wireSendCmd("PMBUS_COMMAND")
+//   -wireWriteByte("PMBUS_COMMAND", data8)
 //   -wireWriteWord("PMBUS_COMMAND", data16)
 //
 //  The available PMBus Commands can be checked on the INA233 datasheet
@@ -42,21 +43,32 @@ void setup(void)
  Serial.println("Writing and reading calibration register from INA233 ...");
  IC1.begin();
  IC2.begin();
-  
+ uint16_t value16=0;
+ uint8_t value8=0;
+ uint8_t data8=0x06;
+ uint16_t data16=0x0034;
  
-
+ //Example of sending just the command
+ IC1.wireSendCmd(RESTORE_DEFAULT_ALL);
+ 
+ IC1.wireReadByte(MFR_DEVICE_CONFIG,&value8);
+ IC1.wireReadWord(MFR_CALIBRATION,&value16);
+ Serial.print(" Default Config IC1:   "); Serial.println(value8,HEX);
+ Serial.print(" Default Calibration IC1:   "); Serial.println(value16,HEX);
+ 
+ //Sending a byte and word
+ IC1.wireWriteByte(MFR_DEVICE_CONFIG, data8);
+ IC1.wireWriteWord(MFR_CALIBRATION, data16);
+ 
+ //checking that the new values are loaded to the registers
+ IC1.wireReadByte(MFR_DEVICE_CONFIG,&value8);
+ IC1.wireReadWord(MFR_CALIBRATION,&value16);
+ Serial.print(" New Config IC1:   "); Serial.println(value8,HEX);
+ Serial.print(" New Calibration IC1:   "); Serial.println(value16,HEX); 
+ 
 }
 
 void loop() 
 {
- uint16_t value=0;
- uint16_t data16=0x0034;
- 
- IC1.wireSendByte(RESTORE_DEFAULT_ALL);
- IC1.wireReadWord(MFR_CALIBRATION,&value);
- Serial.print(" Default Calibration IC1:   "); Serial.println(value,HEX);
- IC1.wireWriteWord(MFR_CALIBRATION, data16);
- IC1.wireReadWord(MFR_CALIBRATION,&value);
- Serial.print(" New Calibration IC1:   "); Serial.println(value,HEX);
- delay(2000);
+// place your code here
 }
