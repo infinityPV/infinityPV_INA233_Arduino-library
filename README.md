@@ -29,7 +29,7 @@ Product Versions
 
 Version History
 ---------------
-* [V1.0](https://github.com/infinityPV/infinityPV_INA233_Arduino-library/releases/tag/V1.0) - Test Release
+* [V1.0](https://github.com/infinityPV/infinityPV_INA233_Arduino-library/releases/tag/V1.0) - Release V1.0
 
 
 License Information
