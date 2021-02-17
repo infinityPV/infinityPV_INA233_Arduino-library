@@ -316,7 +316,7 @@ int16_t INA233::getPower_raw() {
 void INA233::getEnergy_raw(uint16_t* accumulator, uint8_t* roll_over, uint32_t* sample_count) {
   uint8_t value[6];
   //uint8_t test[6] = { 0x00, 0x11,0x22,0x33,0x44,0x55};
-  uint32_t aux;
+  // uint32_t aux;
   wireReadBlock(READ_EIN, value);
   *accumulator=(value[1] << 8) | value[0];
   *roll_over=value[2];
