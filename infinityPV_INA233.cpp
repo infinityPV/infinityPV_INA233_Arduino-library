@@ -41,13 +41,13 @@
 /**************************************************************************/
 void INA233::wireSendCmd(uint8_t reg)
 {
-  Wire.beginTransmission(ina233_i2caddr);
+  m_i2c.beginTransmission(ina233_i2caddr);
   #if ARDUINO >= 100
-    Wire.write(reg);                       // PMBus command
+    m_i2c.write(reg);                       // PMBus command
   #else
-    Wire.send(reg);                        // PMBus command
+    m_i2c.send(reg);                        // PMBus command
   #endif
-  Wire.endTransmission();
+  m_i2c.endTransmission();
 }
 /**************************************************************************/
 /*!
@@ -57,15 +57,15 @@ void INA233::wireSendCmd(uint8_t reg)
 /**************************************************************************/
 void INA233::wireWriteByte (uint8_t reg, uint8_t value)
 {
-  Wire.beginTransmission(ina233_i2caddr);
+  m_i2c.beginTransmission(ina233_i2caddr);
   #if ARDUINO >= 100
-    Wire.write(reg);                       // PMBus command
-    Wire.write(value);                     // byte to write
+    m_i2c.write(reg);                       // PMBus command
+    m_i2c.write(value);                     // byte to write
   #else
-    Wire.send(reg);                        // PMBus command
-    Wire.send(value);                      // byte to write
+    m_i2c.send(reg);                        // PMBus command
+    m_i2c.send(value);                      // byte to write
   #endif
-  Wire.endTransmission();
+  m_i2c.endTransmission();
 }
 /**************************************************************************/
 /*!
@@ -75,17 +75,17 @@ void INA233::wireWriteByte (uint8_t reg, uint8_t value)
 /**************************************************************************/
 void INA233::wireWriteWord (uint8_t reg, uint16_t value)
 {
-  Wire.beginTransmission(ina233_i2caddr);
+  m_i2c.beginTransmission(ina233_i2caddr);
   #if ARDUINO >= 100
-    Wire.write(reg);                       // PMBus command
-    Wire.write(value & 0xFF);              // Lower 8-bits
-    Wire.write((value >> 8) & 0xFF);       // Upper 8-bits
+    m_i2c.write(reg);                       // PMBus command
+    m_i2c.write(value & 0xFF);              // Lower 8-bits
+    m_i2c.write((value >> 8) & 0xFF);       // Upper 8-bits
   #else
-    Wire.send(reg);                        // PMBus command
-    Wire.send(value & 0xFF);               // Lower 8-bits
-    Wire.send(value >> 8);                 // Upper 8-bits
+    m_i2c.send(reg);                        // PMBus command
+    m_i2c.send(value & 0xFF);               // Lower 8-bits
+    m_i2c.send(value >> 8);                 // Upper 8-bits
   #endif
-  Wire.endTransmission();
+  m_i2c.endTransmission();
 }
 /**************************************************************************/
 /*!
@@ -98,11 +98,11 @@ void INA233::wireReadBlock(uint8_t reg, uint8_t value[6])
 {
   int i;
   uint8_t block_size;
-  Wire.requestFrom(ina233_i2caddr,(uint8_t)7,reg,(uint8_t)1,(uint8_t)true);
-  block_size=Wire.read();
+  m_i2c.requestFrom(ina233_i2caddr,(uint8_t)7,reg,(uint8_t)1,(uint8_t)true);
+  block_size=m_i2c.read();
   for (i=0;i<block_size;i++)
   {
-    value[i]=Wire.read();
+    value[i]=m_i2c.read();
   }
 }
 
@@ -113,9 +113,9 @@ void INA233::wireReadBlock(uint8_t reg, uint8_t value[6])
 /**************************************************************************/
 void INA233::wireReadWord(uint8_t reg, uint16_t *value)
 {
-  Wire.requestFrom(ina233_i2caddr,(uint8_t)2,reg,(uint8_t)1,(uint8_t)true);
-  *value = Wire.read();
-  *value=((Wire.read() << 8) | *value);
+  m_i2c.requestFrom(ina233_i2caddr,(uint8_t)2,reg,(uint8_t)1,(uint8_t)true);
+  *value = m_i2c.read();
+  *value=((m_i2c.read() << 8) | *value);
 }
 /**************************************************************************/
 /*!
@@ -124,8 +124,8 @@ void INA233::wireReadWord(uint8_t reg, uint16_t *value)
 /**************************************************************************/
 void INA233::wireReadByte(uint8_t reg, uint8_t *value)
 {
-  Wire.requestFrom(ina233_i2caddr,(uint8_t)1,reg,(uint8_t)1,(uint8_t)true);
-  *value = Wire.read();
+  m_i2c.requestFrom(ina233_i2caddr,(uint8_t)1,reg,(uint8_t)1,(uint8_t)true);
+  *value = m_i2c.read();
 }
 /**************************************************************************/
 /*!
@@ -246,7 +246,7 @@ uint16_t INA233::setCalibration(float r_shunt,float i_max,float *Current_LSB,flo
     @brief  Instantiates a new INA233 class
 */
 /**************************************************************************/
-INA233::INA233(uint8_t addr) {
+INA233::INA233(uint8_t addr, TwoWire &i2c) : m_i2c(i2c) {
   ina233_i2caddr = addr;
   m_c=0;
   R_c=0;
@@ -259,7 +259,7 @@ INA233::INA233(uint8_t addr) {
 */
 /**************************************************************************/
 void INA233::begin() {
-  Wire.begin();
+  m_i2c.begin();
 }
 /**************************************************************************/
 /*!
@@ -316,7 +316,7 @@ int16_t INA233::getPower_raw() {
 void INA233::getEnergy_raw(uint16_t* accumulator, uint8_t* roll_over, uint32_t* sample_count) {
   uint8_t value[6];
   //uint8_t test[6] = { 0x00, 0x11,0x22,0x33,0x44,0x55};
-  uint32_t aux;
+  // uint32_t aux;
   wireReadBlock(READ_EIN, value);
   *accumulator=(value[1] << 8) | value[0];
   *roll_over=value[2];
